@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Nginx test and reload script with validation
+# This script tests nginx configuration and reloads if valid
+set -euo pipefail
+
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+LOG_PREFIX="[$TIMESTAMP]"
+
+# Color output for better readability
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+log_info() {
+  echo -e "${BLUE}${LOG_PREFIX} ℹ️  $1${NC}"
+}
+
+log_success() {
+  echo -e "${GREEN}${LOG_PREFIX} ✅ $1${NC}"
+}
+
+log_error() {
+  echo -e "${RED}${LOG_PREFIX} ❌ $1${NC}"
+}
+
+# Check if running with root privileges
+if [[ $EUID -ne 0 ]]; then
+  log_error "This script must be run with sudo"
+  exit 1
+fi
+
+# Check if nginx exists
+if ! command -v nginx &> /dev/null; then
+  log_error "nginx command not found. Is nginx installed?"
+  exit 1
+fi
+
+log_info "Checking nginx configuration..."
+
+# Test configuration
+if sudo nginx -t 2>&1; then
+  log_info "Configuration test passed. Reloading nginx..."
+
+  if sudo systemctl reload nginx; then
+    log_success "Nginx reloaded successfully."
+    exit 0
+  else
+    log_error "Failed to reload nginx via systemctl."
+    exit 1
+  fi
+else
+  log_error "Nginx configuration test failed. Reload aborted."
+  exit 1
+fi
