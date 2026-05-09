@@ -13,7 +13,7 @@ A bash script that tests nginx configuration and automatically reloads it if val
 ### Method 1: System-wide Installation (Recommended)
 
 ```bash
-git clone https://github.com/otoneko1102/ngreload.git
+git clone https://github.com/otnc/ngreload.git
 cd ngreload
 sudo make install
 ```
@@ -23,7 +23,7 @@ This installs the script to `/usr/local/bin` and requires sudo access.
 ### Method 2: Local User Installation
 
 ```bash
-git clone https://github.com/otoneko1102/ngreload.git
+git clone https://github.com/otnc/ngreload.git
 cd ngreload
 make install-local
 ```
@@ -37,7 +37,7 @@ export PATH="$HOME/.local/bin:$PATH"
 ### Method 3: Root's bin Directory
 
 ```bash
-git clone https://github.com/otoneko1102/ngreload.git
+git clone https://github.com/otnc/ngreload.git
 cd ngreload
 sudo make install-root
 ```
